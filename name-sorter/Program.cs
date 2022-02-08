@@ -8,7 +8,7 @@ namespace NameSorter
 {
     // This is a simple console application that takes the name of a local text file and sorts each line's name. 
     // It assumes that the last word in each line is the last name. The names are sorted first by last name, then from the name left to right. 
-    public class Program
+    public class NameSorter
     {
         static void Main(string[] args)
         {

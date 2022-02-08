@@ -25,10 +25,11 @@ namespace name_sorter
                 return;
             }
 
-            var path = args[0];
-            string[] lines = File.ReadAllLines(path, Encoding.UTF8); //unit test ,if empty return empty, if sorted, return sroted?? probably don't need that
+            var namesTextFilePath = args[0];
+            string[] lines = File.ReadAllLines(namesTextFilePath, Encoding.UTF8); //unit test ,if empty return empty, if sorted, return sroted?? probably don't need that
 
-            // Get names as List of arrays. Each name is an array: ["Beau", "Tristan", "Bentley"]
+            // Get the names as a reversed array where the last name comes first and the given names are one string. 
+            // Each full name is one array: ["lastName","firstName middleName secondMiddleName"]
             List<string[]> names = new List<string[]>();
             foreach (string line in lines)
             {
@@ -58,39 +59,34 @@ namespace name_sorter
                 name[1] = temp;
 
                 Console.WriteLine(String.Join(" ", name)); //Print array out as string
-
             }
-            // Set a variable to the Documents path.
+
+            // Set a variable to the local path
             string docPath = Environment.CurrentDirectory;
 
-            // Write the string array to a new file named "WriteLines.txt".
+            // Write the string array to a new file named "sorted-names-list.txt".
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "sorted-names-list.txt")))
             {
                 foreach (string[] name in sortedNames)
                     outputFile.WriteLine(String.Join(" ", name));
             }
 
-            //File.AppendAllLines(Path.Combine(docPath, "WriteFile.txt"), sortedNames);
-
-            Boolean CheckIfTxtFile(string fileName)
-            {
-                //Do error checking, that it ends with .txt test
-                if (fileName.Length >= 4)
-                {
-                    var lastFourChar = fileName.Substring(fileName.Length - 4);
-
-                    if (lastFourChar == ".txt")
-                    {
-                        return true;
-                    }
-                }
-                Console.WriteLine("This is not a .txt file");
-                return false;
-            }
-
         }
 
+        static Boolean CheckIfTxtFile(string fileName)
+        {
+            //Do error checking, that it ends with .txt test
+            if (fileName.Length >= 4)
+            {
+                var lastFourChar = fileName.Substring(fileName.Length - 4);
 
+                if (lastFourChar == ".txt")
+                {
+                    return true;
+                }
+            }
+            Console.WriteLine("The passed in argument is not a .txt file");
+            return false;
+        }
     }
-
 }

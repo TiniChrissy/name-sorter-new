@@ -28,27 +28,78 @@ namespace name_sorter
             var path = args[0];
             string[] lines = File.ReadAllLines(path, Encoding.UTF8); //unit test ,if empty return empty, if sorted, return sroted?? probably don't need that
 
-            List<string[]> names = new List<string[]>();
+            // Get names as List of arrays. Each name is an array: ["Beau", "Tristan", "Bentley"]
+            List<string[]> lastNameFirst = new List<string[]>();
+            var maxNameLength = 0;
             foreach (string line in lines)
             {
-                Console.WriteLine(line);
+                //Console.WriteLine(line);
                 var fullName = line.Split(' ');
                 var lastName = fullName[fullName.Length - 1];
-                Console.WriteLine(lastName);
-                names.Add(fullName);
-                //lastName.
+
+
+                var givenames = fullName.Take(fullName.Length - 1);
+                string givenNamesOneString = String.Join(" ", givenames);
+                //Console.WriteLine(givenNamesOneString);
+                var endName = fullName.Skip(fullName.Length - 1);
+                var backwards = endName.Concat(givenames);
+
+                //var forwards = givenNamesOneString.Concat(backwards);
+                //var forwards = lastName.Concat(new[] { givenNamesOneString }).ToArray();
+                //var forwards = [lastName, givenNamesOneString];
+                string[] forwards = new string[] { lastName, givenNamesOneString };
+
+                //Console.WriteLine(forwards);
+                Console.WriteLine(String.Join("+", forwards));
+
+                lastNameFirst.Add(forwards);
+                //lastNameFirst.Add(backwards);
+
+                // Get maximum name length
+                if (fullName.Length > maxNameLength)
+                {
+                    maxNameLength = fullName.Length;
+                }
 
             }
-            List<string[]> aaa = names.OrderBy(name => name[name.Length - 1]).ToList();
+            // Sort by last name
+            List<string[]> aaa = lastNameFirst
+                .OrderBy(name => name[0])
+                .ThenBy(name => name[1])
+                .ToList();
+
+
+            //aaa.Sort((a, b) => a[0].CompareTo(b[0]))/*;*/
+
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    for (int j = 0;  j < aaa.Count(); j ++)
+            //    {
+
+            //    }
+
+            //    foreach (string[] name in aaa)
+            //    {
+
+            //    }
+            //    Console.WriteLine(CompareStrings(strFirst, strSecond));
+            //}
+            Console.WriteLine("After sort");
+
             foreach (string[] name in aaa)
             {
-                //Console.WriteLine(name);
                 Console.WriteLine(String.Join(" ", name)); //Print array out as string
+            }
+
+            for (int i = 0; i < maxNameLength; i++)
+            {
+                //Console.WriteLine(i);
+                List<string[]> ddd = lastNameFirst.OrderBy(name => name[name.Length - 1]).ToList();
             }
 
             Boolean CheckIfTxtFile(string fileName)
             {
-                //Do error checking, that it ends with .txt
+                //Do error checking, that it ends with .txt test
                 if (fileName.Length >= 4)
                 {
                     var lastFourChar = fileName.Substring(fileName.Length - 4);
@@ -70,10 +121,6 @@ namespace name_sorter
                 return aaa;
             }
 
-            void outputArrayToTxtFile(string[] arrau)
-            {
-                return;
-            }
         }
     }
 

@@ -4,11 +4,11 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace name_sorter
+namespace NameSorter
 {
     // This is a simple console application that takes the name of a local text file and sorts each line's name. 
     // It assumes that the last word in each line is the last name. The names are sorted first by last name, then from the name left to right. 
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -58,7 +58,7 @@ namespace name_sorter
                 name[0] = name[1];
                 name[1] = temp;
 
-                Console.WriteLine(String.Join(" ", name)); //Print array out as string
+                Console.WriteLine(String.Join(" ", name)); //Print each name (array) out as string
             }
 
             // Set a variable to the local path
@@ -73,7 +73,7 @@ namespace name_sorter
 
         }
 
-        static Boolean CheckIfTxtFile(string fileName)
+        public static Boolean CheckIfTxtFile(string fileName)
         {
             //Do error checking, that it ends with .txt test
             if (fileName.Length >= 4)

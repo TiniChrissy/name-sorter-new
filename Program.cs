@@ -30,23 +30,19 @@ namespace name_sorter
 
             // Get names as List of arrays. Each name is an array: ["Beau", "Tristan", "Bentley"]
             List<string[]> names = new List<string[]>();
-            var maxNameLength = 0;
             foreach (string line in lines)
             {
-                //Console.WriteLine(line);
                 var fullName = line.Split(' ');
                 var lastName = fullName[fullName.Length - 1];
                 var givenNames = fullName.Take(fullName.Length - 1);
                 string givenNamesOneString = String.Join(" ", givenNames);
 
-                string[] forwards = new string[] { lastName, givenNamesOneString };
+                string[] reversedName = new string[] { lastName, givenNamesOneString };
 
-                //Console.WriteLine(forwards);
-                //Console.WriteLine(String.Join(" ", forwards));
-
-                names.Add(forwards);
+                names.Add(reversedName);
             }
-            // Sort by last name
+
+            // Sort by last name, then by given name/s
             List<string[]> sortedNames = names
                 .OrderBy(name => name[0])   //name[0]: Last name
                 .ThenBy(name => name[1])    //name[1]: Given name/s
@@ -55,8 +51,26 @@ namespace name_sorter
             // Print to console
             foreach (string[] name in sortedNames)
             {
+                // Swap given name/s and last name back
+                string temp = "";            
+                temp = name[0];
+                name[0] = name[1];
+                name[1] = temp;
+
                 Console.WriteLine(String.Join(" ", name)); //Print array out as string
+
             }
+            // Set a variable to the Documents path.
+            string docPath = Environment.CurrentDirectory;
+
+            // Write the string array to a new file named "WriteLines.txt".
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "sorted-names-list.txt")))
+            {
+                foreach (string[] name in sortedNames)
+                    outputFile.WriteLine(String.Join(" ", name));
+            }
+
+            //File.AppendAllLines(Path.Combine(docPath, "WriteFile.txt"), sortedNames);
 
             Boolean CheckIfTxtFile(string fileName)
             {
@@ -67,7 +81,6 @@ namespace name_sorter
 
                     if (lastFourChar == ".txt")
                     {
-                        Console.WriteLine("This is a .txt file");
                         return true;
                     }
                 }
@@ -76,6 +89,8 @@ namespace name_sorter
             }
 
         }
+
+
     }
 
 }

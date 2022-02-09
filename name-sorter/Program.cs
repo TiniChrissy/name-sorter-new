@@ -7,7 +7,7 @@ using System.Linq;
 namespace NameSorter
 {
     // This is a simple console application that takes the name of a local text file and sorts each line's name. 
-    // It assumes that the last word in each line is the last name. The names are sorted first by last name, then from the name left to right. 
+    // It assumes that the last word in each line is the last name. The names are sorted first by last name, then from the given name/s left to right. 
     public class NameSorter
     {
         static void Main(string[] args)
@@ -26,22 +26,9 @@ namespace NameSorter
             }
 
             var namesTextFilePath = args[0];
-            string[] lines = File.ReadAllLines(namesTextFilePath, Encoding.UTF8); //unit test ,if empty return empty, if sorted, return sroted?? probably don't need that
+            string[] lines = File.ReadAllLines(namesTextFilePath, Encoding.UTF8);
 
-            // Get the names as a reversed array where the last name comes first and the given names are one string. 
-            // Each full name is one array: ["lastName","firstName middleName secondMiddleName"]
-            List<string[]> names = new List<string[]>();
-            foreach (string line in lines)
-            {
-                var fullName = line.Split(' ');
-                var lastName = fullName[fullName.Length - 1];
-                var givenNames = fullName.Take(fullName.Length - 1);
-                string givenNamesOneString = String.Join(" ", givenNames);
-
-                string[] reversedName = new string[] { lastName, givenNamesOneString };
-
-                names.Add(reversedName);
-            }
+            List<string[]> names = ReverseNames(lines);
 
             // Sort by last name, then by given name/s
             List<string[]> sortedNames = names
@@ -53,7 +40,7 @@ namespace NameSorter
             foreach (string[] name in sortedNames)
             {
                 // Swap given name/s and last name back
-                string temp = "";            
+                string temp = "";
                 temp = name[0];
                 name[0] = name[1];
                 name[1] = temp;
@@ -73,6 +60,7 @@ namespace NameSorter
 
         }
 
+        // Returns true or false dependent on whether the last four characters are .txt
         public static Boolean CheckIfTxtFile(string fileName)
         {
             //Do error checking, that it ends with .txt test
@@ -88,5 +76,25 @@ namespace NameSorter
             Console.WriteLine("The passed in argument is not a .txt file");
             return false;
         }
+
+        // Get the names as a reversed array where the last name comes first and the given names are one string. 
+        // Each full name is one array: ["lastName","firstName middleName secondMiddleName"]
+        public static List<string[]> ReverseNames(string[] names)
+        {
+            List<string[]> reversedNames = new List<string[]>();
+            foreach (string name in names)
+            {
+                var fullName = name.Split(' ');
+                var lastName = fullName[fullName.Length - 1];
+                var givenNames = fullName.Take(fullName.Length - 1);
+                string givenNamesOneString = String.Join(" ", givenNames);
+                string[] reversedName = new string[] { lastName, givenNamesOneString };
+
+                reversedNames.Add(reversedName);
+            }
+            return reversedNames;
+        }
+
     }
 }
+
